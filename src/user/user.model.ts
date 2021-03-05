@@ -22,14 +22,7 @@ export const UserSchema = new mongoose.Schema({
         type:String,
         minlength:7,
     },
-    // address: {
-    //     addr1: String,
-    //     addr2: String,
-    //     city: String,
-    //     state: String,
-    //     country: String,
-    //     zip: Number
-    // },
+   
     created: {
         type: Date,
         default: Date.now
@@ -37,6 +30,7 @@ export const UserSchema = new mongoose.Schema({
     token: {
         type: String,
     },
+    
 })
 // interface Address{
 //     addr1: string,
@@ -55,7 +49,6 @@ export interface User extends mongoose.Document {
     number:string,
     token: string,
     admin: boolean,
-    // address:Address,
     created:Date,  
 }
 

@@ -21,8 +21,6 @@ export class UserService {
     async insertUser(name: string, email: string, password: string,number:string, admin?: boolean) {
         const uniqueUser = await this.findUser(email);
         if (!uniqueUser) {
-            // console.log(uniqueUser,"unique");
-
           const bcrypt = require('bcrypt');
           console.log('password -->', password)
           const hashedPassword = await bcrypt.hash(password, 10);
@@ -89,10 +87,7 @@ export class UserService {
 
     // }
     async logout(id: string) {
-
         await this.userModel.findOneAndUpdate({ _id: id }, { token: "" })
-
-
     }
 }
 

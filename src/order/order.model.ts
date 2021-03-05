@@ -4,15 +4,16 @@ import { User } from "../user/user.model"
 import { Product } from "../products/product.model"
 export const OrderSchema = new mongoose.Schema({
 
-  owner: {
+  customerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+
   totalPrice: {
     type: Number,
     default: 0,
   },
-  products: [
+  ordered_food: [
     {
       product: {
         type: mongoose.Schema.Types.ObjectId,
@@ -20,23 +21,54 @@ export const OrderSchema = new mongoose.Schema({
       },
       quantity: {
         type: Number,
-        default: 0,
+        default: 1,
       },
     },
   ],
+  order_status:{
+    type:String,
+    default: "In Cart",
+    enum: ["In Cart", "Processing", "Preparing", "Delivered", "Cancelled"] // enum means string objects
+  },
+  location_to:{
+    addr1: String,
+    addr2: String,
+    city:String,
+    streetNo:String,
+    country:String,
+  },
+  location_from:{
+    addr1: String,
+    addr2: String,
+    city:String,
+    streetNo:String,
+    country:String,
+  },
+
   created: {
     type: Date,
     default: Date.now,
   }
+  
 })
-interface ProductOrder {
-  product: Product,
+interface FoodOrder {
+  foodItem: Product,
   quantity: number,
 }
+interface Address{
+    addr1: string,
+    addr2: string,
+    city:string,
+    streetNo:string,
+    country:string,
+}
 export interface Order extends mongoose.Document {
-  owner: User,
+  customerId: User,
   totalPrice: number,
-  products:ProductOrder[],
+  ordered_food:FoodOrder[],
+  order_status:string,
+  location_to:Address,
+  location_from:Address,
   created:Date,
 }
 
