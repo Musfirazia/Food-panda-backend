@@ -14,19 +14,19 @@ export const SellerSchema = new mongoose.Schema({
         type: String,
         minlength: 5
     },
-    contactNumber:{
+    contactNumber: {
         type: String,
         minlength: 7,
     },
-    businessName:{
+    businessName: {
         type: String,
         minlength: 5
     },
-    pickup:{
+    pickup: {
         type: Boolean,
         default: false
     },
-    foodDelivery:{
+    foodDelivery: {
         type: Boolean,
         default: true
     },
@@ -46,26 +46,26 @@ export const SellerSchema = new mongoose.Schema({
     },
 
 })
-export interface Address{
+export interface Address {
     addr1: string,
     addr2: string,
-    city:string
-    state:string,
-    country:string,
+    city: string
+    state: string,
+    country: string,
 }
 
 export interface Seller extends mongoose.Document {
     _id: string,
-    name:string,
-    email:string,
-    password:string,
-    contactNumber:string,
+    name: string,
+    email: string,
+    password: string,
+    contactNumber: string,
     BusinessName: string,
-    Pickup:boolean,
-    FoodDelivery:boolean,
-    address:Address,
-    availableArea:Address,
-   
+    Pickup: boolean,
+    FoodDelivery: boolean,
+    address: Address,
+    availableArea: Address,
+
 }
 
 

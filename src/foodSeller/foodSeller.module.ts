@@ -6,10 +6,10 @@ import { SellerService } from './foodSeller.service';
 
 
 @Module({
-    imports: [MongooseModule.forFeature([{ name: 'Seller', schema: SellerSchema }, 
+    imports: [MongooseModule.forFeature([{ name: 'Seller', schema: SellerSchema },
     ])],
     controllers: [SellerController],
     providers: [SellerService],
 })
-export class SellerModule  {
+export class SellerModule {
 }

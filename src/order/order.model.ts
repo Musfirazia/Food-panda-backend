@@ -1,12 +1,19 @@
 import * as mongoose from 'mongoose';
 mongoose.set('useCreateIndex', true);
-import { User } from "../user/user.model"
-import { Product } from "../products/product.model"
-export const OrderSchema = new mongoose.Schema({
 
+
+export const OrderSchema = new mongoose.Schema({
   customerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+  },
+  foodSeller: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Seller',
+  },
+  riderId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Rider',
   },
 
   totalPrice: {
@@ -15,9 +22,9 @@ export const OrderSchema = new mongoose.Schema({
   },
   ordered_food: [
     {
-      product: {
+      Menu: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: 'Menu',
       },
       quantity: {
         type: Number,
@@ -25,51 +32,53 @@ export const OrderSchema = new mongoose.Schema({
       },
     },
   ],
-  order_status:{
-    type:String,
+  order_status: {
+    type: String,
     default: "In Cart",
     enum: ["In Cart", "Processing", "Preparing", "Delivered", "Cancelled"] // enum means string objects
   },
-  location_to:{
+  location_to: {
     addr1: String,
     addr2: String,
-    city:String,
-    streetNo:String,
-    country:String,
+    city: String,
+    streetNo: String,
+    country: String,
   },
-  location_from:{
+  location_from: {
     addr1: String,
     addr2: String,
-    city:String,
-    streetNo:String,
-    country:String,
+    city: String,
+    streetNo: String,
+    country: String,
   },
 
   created: {
     type: Date,
     default: Date.now,
   }
-  
+
 })
 interface FoodOrder {
-  foodItem: Product,
+  Menu: Object,
   quantity: number,
 }
-interface Address{
-    addr1: string,
-    addr2: string,
-    city:string,
-    streetNo:string,
-    country:string,
+interface Address {
+  addr1: string,
+  addr2: string,
+  city: string,
+  streetNo: string,
+  country: string,
 }
 export interface Order extends mongoose.Document {
-  customerId: User,
+  _id: string,
+  customerId: Object,
+  foodSeller: Object,
   totalPrice: number,
-  ordered_food:FoodOrder[],
-  order_status:string,
-  location_to:Address,
-  location_from:Address,
-  created:Date,
+  ordered_food: FoodOrder[],
+  order_status: string,
+  location_to: Address,
+  location_from: Address,
+  created: Date,
 }
 
 

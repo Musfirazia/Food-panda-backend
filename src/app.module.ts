@@ -1,11 +1,14 @@
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
-import { ProductsModule } from './products/products.module';
-import {SellerModule} from "./foodSeller/foodSeller.module";
 import { LoggerMiddleware } from './loggerMiddleware';
 import { ConfigModule } from '@nestjs/config';
+
+import { UserModule } from './user/user.module';
+import { MenuModule } from './Menu/menu.module';
+import {SellerModule} from "./foodSeller/foodSeller.module";
 import {RiderModule} from "./rider/rider.module";
+import {OrderModule} from "./order/order.module";
+import {PaymentModule} from "./payment/payment.module";
 const config = require("../Config/key.js");
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
@@ -17,7 +20,7 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 @Module({  
-  imports: [ConfigModule.forRoot(),RiderModule,SellerModule,ProductsModule,UserModule,MongooseModule.forRoot(config.mongoURI,{ useNewUrlParser: true, useUnifiedTopology: true }), AuthModule],
+  imports: [ConfigModule.forRoot(),RiderModule,SellerModule,MenuModule,UserModule,MongooseModule.forRoot(config.mongoURI,{ useNewUrlParser: true, useUnifiedTopology: true }), AuthModule,OrderModule,PaymentModule],
   controllers: [AppController],
   providers: [AppService],
 })
