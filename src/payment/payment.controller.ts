@@ -7,10 +7,10 @@ export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {
 
   }
-  @Post(":id")
-  addpayment(@Param('id') customerId: string, @Req() req: Request, @Res() res: Response) {
+  @Post()
+  async addpayment( @Req() req: Request, @Res() res: Response) {
     try {
-      const result = this.paymentService.addTransaction(customerId, req.body.orderId, req.body.totalPrice, req.body.voucher, req.body.paymentType, req.body.cardDetails, req.body.expiryDate);
+      const result = await this.paymentService.addTransaction(req,req.body.orderId, req.body.totalPrice, req.body.voucher, req.body.paymentType, req.body.cardDetails, req.body.expiryDate);
       res.status(200).send({
         responseCode: 200,
         result: result,

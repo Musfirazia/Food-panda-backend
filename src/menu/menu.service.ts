@@ -3,26 +3,27 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Menu } from './Menu.model';
 import { Model } from 'mongoose';
 import { CreateMenuDTO, UpdateMenuDTO } from './Menu.dto';
-import {Seller} from "../foodSeller/foodSeller.model";
+import { Seller } from "../foodSeller/foodSeller.model";
 @Injectable()
 export class MenuService {
     constructor(@InjectModel('Menu') private readonly MenuModel: Model<Menu>,
-    @InjectModel('Seller') private readonly sellerModel: Model<Seller>) {
+        @InjectModel('Seller') private readonly sellerModel: Model<Seller>) {
 
     }
-    async insertMenu(MenuDTO: CreateMenuDTO,foodSeller:string,category:string): Promise<Menu> {
+    async insertMenu(req,MenuDTO: CreateMenuDTO, category: string): Promise<Menu> {
+        const foodSeller=req.body.decodeToken.id;
         const seller = await this.sellerModel.findById(foodSeller);
-        if(seller !== null){
+        if (seller !== null) {
             const Menu = await this.MenuModel.create({
-               foodSeller,
+                foodSeller,
                 ...MenuDTO,
-category
-              });
-              await Menu.save();
-              console.log(Menu);
-              return Menu.populate('foodSeller');
+                category
+            });
+            await Menu.save();
+            console.log(Menu);
+            return Menu.populate('foodSeller');
         }
-        else{
+        else {
             throw new NotFoundException("could n't find any seller");
 
         }
@@ -30,7 +31,7 @@ category
 
     }
     async findByOwner(id: string): Promise<Menu[]> {
-        const Menu= await this.MenuModel.find({ owner: id }).populate('owner');
+        const Menu = await this.MenuModel.find({ owner: id }).populate('owner');
         return Menu;
     }
     async getMenu() {
@@ -53,21 +54,21 @@ category
         }
         return Menu;
     }
-    async updateMenu(prodId: string, MenuDTO: UpdateMenuDTO,userId:string): Promise<Menu> {
+    async updateMenu(prodId: string, MenuDTO: UpdateMenuDTO, userId: string): Promise<Menu> {
         const Menu = await this.MenuModel.findById(prodId);
-    
-        console.log("hvh",Menu.owner);
-        if("5fd495bdb7560f1c102a64d6" !== Menu.owner){
-            throw new HttpException("You do not own this Menu",HttpStatus.UNAUTHORIZED);
+
+        console.log("hvh", Menu.owner);
+        if ("5fd495bdb7560f1c102a64d6" !== Menu.owner) {
+            throw new HttpException("You do not own this Menu", HttpStatus.UNAUTHORIZED);
         }
         await Menu.updateMenu(MenuDTO);
         return await this.MenuModel.findById(prodId).populate('owner');
     }
 
-    async deleteMenu(prodId: string,userId:string): Promise<Menu> {
+    async deleteMenu(prodId: string, userId: string): Promise<Menu> {
         const Menu = await this.MenuModel.findById(prodId);
-        if(userId !==Menu.owner.toString()){
-            throw new HttpException("You do not own this Menu",HttpStatus.UNAUTHORIZED);
+        if (userId !== Menu.owner.toString()) {
+            throw new HttpException("You do not own this Menu", HttpStatus.UNAUTHORIZED);
         }
         await Menu.remove();
         return Menu.populate('owner');

@@ -30,6 +30,7 @@ export class AppModule implements NestModule {
       .apply(LoggerMiddleware)
       .exclude(
         { path: 'auth/login', method: RequestMethod.ALL },
+        { path: 'auth/seller/login', method: RequestMethod.ALL },
         { path: 'user/signup', method: RequestMethod.ALL },
         { path: 'seller/signup', method: RequestMethod.ALL },
 

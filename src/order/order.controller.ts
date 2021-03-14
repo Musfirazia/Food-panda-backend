@@ -7,10 +7,10 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {
 
   }
-  @Post(":id")
-  addOrder(@Param('id') customerId: string, @Req() req: Request, @Res() res: Response) {
+  @Post()
+ async addOrder( @Req() req: Request, @Res() res: Response) {
     try {
-      const result = this.orderService.addOrder(customerId, req.body.foodSeller, req.body.riderId, req.body.totalPrice, req.body.ordered_food, req.body.order_status, req.body.location_to, req.body.location_from);
+      const result = await this.orderService.addOrder(req, req.body.foodSeller, req.body.riderId, req.body.totalPrice, req.body.ordered_food, req.body.order_status, req.body.location_to, req.body.location_from);
       res.status(200).send({
         responseCode: 200,
         result: result,

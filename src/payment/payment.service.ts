@@ -12,8 +12,9 @@ export class PaymentService {
   ) {
 
   }
-  async addTransaction(customerId, orderId, totalPrice, voucher, paymentType, cardDetails, expiryDate) {
+  async addTransaction(req,orderId, totalPrice, voucher, paymentType, cardDetails, expiryDate) {
     try {
+      const customerId=req.body.decodeToken.id;
       const Payment = await this.PaymentModel.create({
         customerId, orderId, totalPrice, voucher, paymentType, cardDetails, expiryDate
       });

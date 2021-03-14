@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Param, Post, Patch, Delete, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Res, Req,Post, Patch, Delete, UseGuards } from "@nestjs/common";
 import { CreateMenuDTO, UpdateMenuDTO } from "./Menu.dto";
 import { MenuService } from "./Menu.service";
 // import { User as UserDocument } from '../user/user.model';
 // import { User } from "../utilities/user.decorator";
 import { SellerGuard } from "src/guards/seller.guard";
+import { Request, Response } from 'express';
+
 @Controller('Menu')
 
 export class MenuController {
@@ -11,9 +13,9 @@ export class MenuController {
 
     }
 
-    @Post(':id')
-    async addMenu(@Param('id') foodSeller: string, @Body('category') category: string, @Body() Menu: CreateMenuDTO) {
-        const generatedId = await this.MenuService.insertMenu(Menu, foodSeller, category);
+    @Post()
+    async addMenu(@Req() req: Request, @Body('category') category: string, @Body() Menu: CreateMenuDTO) {
+        const generatedId = await this.MenuService.insertMenu(req, Menu, category);
         return generatedId;
     }
     // @Get('/mine/:id')
