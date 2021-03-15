@@ -36,4 +36,19 @@ export class AuthController {
       });
     }
   }
+  @Post('/admin/login')
+  async loginAsAdmin(@Req() req: Request, @Res() res: Response) {
+    try {
+      const token = await this.authService.signInAsAdmin(req);
+      res.status(200).send({
+        responseCode: 200,
+        result: token,
+      });
+    } catch (error) {
+      res.status(error.statusCode?error.statusCode : 500).send({
+        responseCode: error.statusCode,
+        result: error.message,
+      });
+    }
+  }
 }

@@ -29,6 +29,7 @@ export const riderSchema = new mongoose.Schema({
     },
     riderStatus:{
         type:String,
+        enum:["pending","approved","rejected"],
         default:'pending'
     }
 })

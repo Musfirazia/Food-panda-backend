@@ -5,11 +5,12 @@ import { SellerSchema } from "../foodSeller/foodSeller.model";
 import { UserSchema } from "../user/user.model";
 import { OrderController } from "./order.controller";
 import { OrderService } from "./order.service";
+import {NodemailerService } from "../nodemailer/nodemailer.service";
 @Module({
     imports: [MongooseModule.forFeature([{ name: 'Order', schema: OrderSchema }, { name: 'User', schema: UserSchema }, { name: 'Seller', schema: SellerSchema }
     ])],
     controllers: [OrderController],
-    providers: [OrderService],
+    providers: [OrderService,NodemailerService],
 
 })
 

@@ -44,6 +44,11 @@ export const SellerSchema = new mongoose.Schema({
         state: String,
         country: String,
     },
+    foodSellerStatus:{
+        type:String,
+        enum:["pending","approved","rejected"],
+        default:"pending"
+    }
 
 })
 export interface Address {
@@ -65,6 +70,7 @@ export interface Seller extends mongoose.Document {
     FoodDelivery: boolean,
     address: Address,
     availableArea: Address,
+    foodSellerStatus:string,
 
 }
 

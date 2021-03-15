@@ -6,8 +6,8 @@ require("dotenv").config();
 export class NodemailerService {
   constructor() { }
 
-  sendEmail = async (req,type) => {
-    console.log('Name -->', req.body.name)
+  sendEmail = async (req,message,email) => {
+    
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
     try {
       var transporter = nodemailer.createTransport({
@@ -23,34 +23,32 @@ export class NodemailerService {
 
       var mailOptions = {
         from: process.env.EmailUserName,
-        to: req.body.email,
-        subject: "PHNX-Dao reason for rejection.",
+        to: "musfirazia250@gmail.com",
+        subject: "Order update",
         text: req.body.reasonForRejecting,
         html:
           `
         <div style=" background-color: white" >
         <img src="cid:logo" style="
-        margin-left: -9px;" alt="Pheonix Dao" width="230px"/>
+        margin-left: -9px; margin:0 auto; display:flex; height:100px"  alt="Food panda" width="190px"/>
         <br/>
-        <h3 style="font-style: 100%" > ${type=="proposalRejection" ? "Your proposal has been rejected" : "Your milestone has been rejected"}</h3>
+        <h1 style="font-style: 100%" > Order Status</h1>
         <hr />
         <br />
 
-        <h3> To: <span>${req.body.email}</span> </h3>
+        <h3> To: <span>${email}</span> </h3>
         <h3> From: <span>${process.env.EmailUserName}</span> </h3>
-
-        <h3>Proposal Name: <span> ${type=="proposalRejection" ? req.body.proposalName : req.body.name} </span> </h3>
-          <h3 >Reason for rejection: ${req.body.reasonForRejecting}</h3>
+          <h3 >${message}</h3>
           <br/>
           <p>
           <hr />
           <p>Thanks, </p>
-          <p>The PheonixDao Team</P>
+          <p>The FoodPanda Team</P>
         </div>
         `,
         attachments: [{
           filename: 'Logo.png',
-          path: __dirname + '/assets/foodpanda.png',
+          path: './assets/foodpanda.png',
           cid: 'logo' //my mistake was putting "cid:logo@cid" here! 
         }]
 

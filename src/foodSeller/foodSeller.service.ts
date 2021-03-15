@@ -48,6 +48,7 @@ export class SellerService {
             throw error;
         }
     }
+    
     //  async findByfoodSeller(id: string): Promise<Menu[]> {
     //     const Menu= await this.MenuModel.find({ foodSeller: id }).populate('foodSeller');
     //     return Menu;
