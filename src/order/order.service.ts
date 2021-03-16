@@ -34,7 +34,54 @@ export class OrderService {
       throw error;
     }
   }
-
+  async updateOrderedFood(req, _id, ordered_food) {
+    try {
+      const customerId = req.body.decodeToken.id;
+      const user = await this.orderModel.findById(_id).exec();
+      if (user.customerId != customerId) {
+        throw { statusCode: 400, message: 'User does not have ordered food' };
+      }
+      if (user.order_status !== "In Cart") {
+        throw { statusCode: 403, message: 'User cannot change ordered Items' };
+      }
+      const update = await this.orderModel.findOneAndUpdate(
+        { _id: _id },
+        { $push: { ordered_food: ordered_food } },
+        { upsert: true }
+      ).exec();
+      return update.populate(_id);
+    }
+    catch (error) {
+      throw error;
+    }
+  }
+  async deleteOrderedFood(req, _id, menuId) {
+    try {
+      const customerId = req.body.decodeToken.id;
+      const user = await this.orderModel.findById(_id).exec();
+      if (user.customerId != customerId) {
+        throw { statusCode: 400, message: 'User does not have ordered food' };
+      }
+      if (user.order_status !== "In Cart") {
+        throw { statusCode: 403, message: 'User cannot change ordered Items' };
+      }
+      // const {ordered_food} =await this.orderModel.findById(_id).where( {ordered_food:{ "$in" : [menuId]} });
+      // console.log("check menu",ordered_food);
+      // if(ordered_food._id !==menuId){
+      //   throw { statusCode: 403, message: 'User doesnot order this item' };
+      // }
+      const update = await this.orderModel.findOneAndUpdate(
+        { _id: _id },
+        { $pull: { ordered_food:{_id:menuId}}},
+        { multi: true }
+        ).exec();
+      console.log("update",update);
+      return update;
+    }
+    catch (error) {
+      throw error;
+    }
+  }
 
 }
 

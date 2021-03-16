@@ -10,7 +10,7 @@ export class MenuService {
         @InjectModel('Seller') private readonly sellerModel: Model<Seller>) {
 
     }
-    async insertMenu(req,MenuDTO: CreateMenuDTO, category: string): Promise<Menu> {
+    async insertMenu(req, category: string,MenuDTO: CreateMenuDTO): Promise<Menu> {
         const foodSeller=req.body.decodeToken.id;
         const seller = await this.sellerModel.findById(foodSeller);
         if (seller !== null) {
@@ -30,19 +30,23 @@ export class MenuService {
 
 
     }
-    async findByOwner(id: string): Promise<Menu[]> {
-        const Menu = await this.MenuModel.find({ owner: id }).populate('owner');
+    async findBySeller(id: string) {
+        const Menu = await this.MenuModel.find({ foodSeller: id });
+        console.log("menu",Menu)
+        if(Menu[0] ==null){
+            throw new NotFoundException("could n't find any menu related to this seller");
+        }
         return Menu;
     }
     async getMenu() {
-        const Menu = await this.MenuModel.find().populate('owner');
-        return await this.MenuModel.find().populate('owner');
+        const Menu = await this.MenuModel.find().populate('foodSeller');
+        return await this.MenuModel.find().populate('foodSeller');
 
     }
     async getSingleMenu(MenuId: string) {
         let Menu = "";
         try {
-            Menu = await this.MenuModel.findById(MenuId).populate('owner')
+            Menu = await this.MenuModel.findById(MenuId).populate('foodSeller')
         }
         catch (error) {
             throw new NotFoundException("could n't find any Menu");
@@ -54,15 +58,23 @@ export class MenuService {
         }
         return Menu;
     }
-    async updateMenu(prodId: string, MenuDTO: UpdateMenuDTO, userId: string): Promise<Menu> {
-        const Menu = await this.MenuModel.findById(prodId);
+    async updateMenu(menuId: string, MenuDTO: UpdateMenuDTO,category: string, req): Promise<Menu> {
+        const sellerId = req.body.decodeToken.id;
+        const Menu = await this.MenuModel.findById(menuId);
 
-        console.log("hvh", Menu.owner);
-        if ("5fd495bdb7560f1c102a64d6" !== Menu.owner) {
+        console.log("Menu", Menu);
+        if (sellerId.toString() !== Menu.foodSeller.toString()) {
             throw new HttpException("You do not own this Menu", HttpStatus.UNAUTHORIZED);
         }
-        await Menu.updateMenu(MenuDTO);
-        return await this.MenuModel.findById(prodId).populate('owner');
+        if(MenuDTO)
+        {
+            Menu.MenuDTO=MenuDTO;
+        }
+        if(category)
+        {
+            Menu.category=category;
+        }
+        return await Menu.save()
     }
 
     async deleteMenu(prodId: string, userId: string): Promise<Menu> {
@@ -70,7 +82,7 @@ export class MenuService {
         if (userId !== Menu.owner.toString()) {
             throw new HttpException("You do not own this Menu", HttpStatus.UNAUTHORIZED);
         }
-        await Menu.remove();
-        return Menu.populate('owner');
+        return await Menu.remove();
+         
     }
 }
